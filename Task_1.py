@@ -33,6 +33,7 @@ def eval_and_log(name, y_true, scores, proba=True, step=None):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--entity", default="yepluovozz-the-australian-national-university")
     ap.add_argument("--dataset", default="VizWiz")
     ap.add_argument("--model-name", default="Qwen2.5-VL-3B-Instruct")
     ap.add_argument("--prompt", default="oe")
@@ -42,7 +43,8 @@ def main():
     ap.add_argument("--run-name", default=None)
     args = ap.parse_args()
 
-    wandb.init(project=args.project, name=args.run_name, config=vars(args))
+    wandb.init(
+        project=args.project, name=args.run_name, config=vars(args))
 
     # 1) load features
     _, x_train, y_train = read_data(args.model_name, args.dataset, "train", args.prompt, args.token_idx, False)
