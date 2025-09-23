@@ -3,7 +3,7 @@ dataset_roots = {
     "MMSafety": "/data/qinyu/data/MM-SafetyBench/",
     "MAD": "/data/coco/",   # MADBench uses COCO images
     "MathVista": "/data/MathVista/",
-    "POPE": "/data/coco/",  # POPE uses COCO images
+    "POPE": "/content/data/coco/",  # POPE uses COCO images
     "ImageNet": "/data/ImageNet/"
 }
 

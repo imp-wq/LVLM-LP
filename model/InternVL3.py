@@ -60,8 +60,19 @@ class InternVL3_1B:
         )
         # 移动到模型设备与 dtype
         for k, v in list(inputs.items()):
-            if hasattr(v, "to"):
-                inputs[k] = v.to(self.model.device, dtype=self.dtype)
+            if not hasattr(v, "to"):
+                continue
+            # 对 input_ids / attention_mask 保持整数或布尔，不做浮点 cast
+            if k in ("input_ids", "attention_mask"):
+                # input_ids 必须 long；attention_mask 用 long 或 bool 都行
+                target_dtype = torch.long if k == "input_ids" else v.dtype
+                inputs[k] = v.to(self.model.device, dtype=target_dtype)
+            else:
+                # 其余（如 pixel_values/images）若是浮点才转成 self.dtype
+                if v.dtype in (torch.float32, torch.float16, torch.bfloat16):
+                    inputs[k] = v.to(self.model.device, dtype=self.dtype)
+                else:
+                    inputs[k] = v.to(self.model.device)
         return inputs
 
     @torch.inference_mode()
